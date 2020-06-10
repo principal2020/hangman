@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+'''
+This code is on the way.
+It needs to be modified.
+'''
+
 from datetime import datetime 
 from dateutil import relativedelta
 import os,shutil as shut
@@ -48,11 +53,11 @@ def convert_time(file,rep_person):
     # timetest=timetest.replace('日','')
     
     cur_time=datetime.strptime(cur_time,'%Y%m%d')
-    timedayago=cur_time+relativedelta.relativedelta(days=1)
-    timetwoweekago=timedayago+relativedelta.relativedelta(days=13)
-    timedago=format(timedayago,'%Y-%m-%d')
+    # timedayago=cur_time+relativedelta.relativedelta(days=1)
+    timetwoweekago=cur_time+relativedelta.relativedelta(days=13)
+    cur_time=format(cur_time,'%Y-%m-%d')
     timetwago=format(timetwoweekago,'%m-%d')
-    duration=timedago+'～'+timetwago
+    duration=cur_time+'～'+timetwago
     # newstr=file.replace(file[-16:-5],timedago+'～'+timetwago)
     
     #Make directory for adding duplicatied files 
@@ -65,6 +70,7 @@ def convert_time(file,rep_person):
     return new_dir
 
 # Loop till inputting the value that is expected.
+# have to use 8 chars and each of them should be num.
 while True:    
     start_day=input('Plz input start date(Use format like "20200609":')
     if len(start_day)!=8 and start_day.isnumeric()==False:
@@ -174,7 +180,7 @@ def match_portal(plist,match):
                 match_cnt+=1
         except:
             break
-
+#return -3 to 3(Zero is excepted)
 def make_rndnum():
     rand = 0
     while rand == 0:
@@ -233,6 +239,13 @@ for file in files:
             sheet[colval + '31']= sheet[colval + '31'].value + rains1
             sheet[colval + '33']=int(at_match[i])
             sheet[colval + '35']=int(su_match[i])
+            se_duration=duration.replace('-','/')
+            this_year=se_duration[:4]
+            st_date=se_duration[5:-6]
+            end_date=se_duration[-5:]
+            #What happens at the end of year... Should use 'relativedelta or something later'
+            sheet['ae34']=this_year + st_date
+            sheet['ae37']=this_year + end_date
     wb.save(new_dir + '/' + file)
 
 # timetest=int(timetest)
